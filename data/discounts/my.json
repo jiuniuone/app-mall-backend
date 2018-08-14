@@ -1,0 +1,97 @@
+{
+  "code": 0,
+  "data": [
+    {
+      "dateAdd": "2018-08-14 16:42:13",
+      "dateEnd": "2018-08-16 00:00:00",
+      "dateStart": "2018-08-14 16:42:14",
+      "id": 61285,
+      "money": 10.00,
+      "moneyHreshold": 88.00,
+      "name": "全品类立减倦",
+      "pid": 862,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "2"
+    },
+    {
+      "dateAdd": "2018-08-14 16:42:00",
+      "dateEnd": "2018-08-18 00:00:00",
+      "dateStart": "2018-08-14 16:42:01",
+      "id": 61284,
+      "money": 20.00,
+      "moneyHreshold": 168.00,
+      "name": "全商品立减劵",
+      "pid": 864,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "4"
+    },
+    {
+      "dateAdd": "2018-08-14 16:41:58",
+      "dateEnd": "2018-08-20 00:00:00",
+      "dateStart": "2018-08-14 16:41:59",
+      "id": 61283,
+      "money": 15.00,
+      "moneyHreshold": 128.00,
+      "name": "全商品立减劵",
+      "pid": 863,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "3"
+    },
+    {
+      "dateAdd": "2018-08-14 16:41:57",
+      "dateEnd": "2018-08-20 00:00:00",
+      "dateStart": "2018-08-14 16:41:57",
+      "id": 61282,
+      "money": 15.00,
+      "moneyHreshold": 128.00,
+      "name": "全商品立减劵",
+      "pid": 863,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "3"
+    },
+    {
+      "dateAdd": "2018-08-14 16:41:55",
+      "dateEnd": "2018-08-16 00:00:00",
+      "dateStart": "2018-08-14 16:41:55",
+      "id": 61281,
+      "money": 8.00,
+      "moneyHreshold": 68.00,
+      "name": "全品类立减券",
+      "pid": 850,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "1"
+    },
+    {
+      "dateAdd": "2018-08-14 16:39:50",
+      "dateEnd": "2018-08-16 00:00:00",
+      "dateStart": "2018-08-14 16:39:51",
+      "id": 61280,
+      "money": 10.00,
+      "moneyHreshold": 88.00,
+      "name": "全品类立减倦",
+      "pid": 862,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "2"
+    },
+    {
+      "dateAdd": "2018-08-14 16:33:25",
+      "dateEnd": "2018-08-18 00:00:00",
+      "dateStart": "2018-08-14 16:33:26",
+      "id": 61279,
+      "money": 20.00,
+      "moneyHreshold": 168.00,
+      "name": "全商品立减劵",
+      "pid": 864,
+      "status": 0,
+      "statusStr": "正常",
+      "type": "4"
+    }
+  ],
+  "msg": "success"
+}

@@ -3,15 +3,15 @@ import json
 from django.conf import settings
 from django.urls import path
 
+from acmin.utils.imports import import_sub_classes
 from acmin.views import api
 from acmin.views.api import route as route
+
+base = settings.BASE_DIR
 
 
 def api_route(path, prefix=""):
     return route(path, prefix='/api/mall')
-
-
-base = settings.BASE_DIR
 
 
 class ApiView(api.ApiView):
@@ -23,8 +23,6 @@ class ApiView(api.ApiView):
     def file_json_response(self, file):
         return self.json_response(self.load_json(file))
 
-
-from acmin.utils.imports import import_sub_classes
 
 import_sub_classes(globals(), __name__, __path__)
 

@@ -1,0 +1,46 @@
+{
+  "code": 0,
+  "data": [
+    {
+      "address": "没有任何问题",
+      "areaStr": "矿区",
+      "cityId": 140300,
+      "cityStr": "阳泉市",
+      "code": "222222",
+      "dateAdd": "2018-08-14 16:03:38",
+      "dateUpdate": "2018-08-14 16:03:38",
+      "districtId": 140303,
+      "id": 31730,
+      "isDefault": true,
+      "linkMan": "王思聪",
+      "mobile": "16588823146",
+      "provinceId": 140000,
+      "provinceStr": "山西省",
+      "status": 0,
+      "statusStr": "正常",
+      "uid": 505853,
+      "userId": 891
+    },
+    {
+      "address": "嗯嗯",
+      "areaStr": "市辖区",
+      "cityId": 320400,
+      "cityStr": "常州市",
+      "code": "132466",
+      "dateAdd": "2018-08-14 15:59:44",
+      "dateUpdate": "2018-08-14 16:03:38",
+      "districtId": 320401,
+      "id": 31729,
+      "isDefault": false,
+      "linkMan": "某某某",
+      "mobile": "13522222222",
+      "provinceId": 320000,
+      "provinceStr": "江苏省",
+      "status": 0,
+      "statusStr": "正常",
+      "uid": 505853,
+      "userId": 891
+    }
+  ],
+  "msg": "success"
+}

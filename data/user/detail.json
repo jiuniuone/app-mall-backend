@@ -1,0 +1,22 @@
+{
+  "code": 0,
+  "data": {
+    "base": {
+      "avatarUrl": "https://wx.qlogo.cn/mmopen/vi_32/cBURcE9d3ia4AVyBKFZGXp5Z5jRTichKEIOghBGDIfDwSNLHQibRm9FGqj7lnAnLvgZ3F4FB1Z1UnF56bghBJFpxw/132",
+      "city": "Weifang",
+      "dateAdd": "2018-08-12 19:26:11",
+      "dateLogin": "2018-08-12 19:26:12",
+      "id": 505853,
+      "ipAdd": "117.136.12.160",
+      "ipLogin": "117.136.12.160",
+      "isIdcardCheck": false,
+      "nick": "Hike",
+      "province": "Shandong",
+      "source": 0,
+      "sourceStr": "小程序",
+      "status": 0,
+      "statusStr": "默认"
+    }
+  },
+  "msg": "success"
+}
