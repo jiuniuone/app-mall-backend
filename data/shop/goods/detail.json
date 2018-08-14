@@ -1,0 +1,126 @@
+{
+  "code": 0,
+  "data": {
+    "logistics": {
+      "isFree": true,
+      "feeType": 1,
+      "feeTypeStr": "按重量",
+      "details": [
+        {
+          "addAmount": 0.00,
+          "addNumber": 1,
+          "firstAmount": 0.00,
+          "firstNumber": 5,
+          "type": 0,
+          "userId": 891
+        }
+      ]
+    },
+    "extJson": {},
+    "category": {
+      "dateAdd": "2018-01-03 13:41:57",
+      "icon": "",
+      "id": 5544,
+      "isUse": true,
+      "key": "003",
+      "name": "浆果",
+      "paixu": 12,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    "pics": [
+      {
+        "goodsId": 16155,
+        "id": 91606,
+        "pic": "https://cdn.it120.cc/apifactory/2018/01/01/c957d6a5729702620e21a864f11d2cfc.png",
+        "userId": 891
+      },
+      {
+        "goodsId": 16155,
+        "id": 91607,
+        "pic": "https://cdn.it120.cc/apifactory/2018/01/01/4ed46aa5fdea015e43a8e10d0e3e5661.png",
+        "userId": 891
+      },
+      {
+        "goodsId": 16155,
+        "id": 91608,
+        "pic": "https://cdn.it120.cc/apifactory/2018/01/01/1ef3ba74d59de972d806beb270847b3a.jpg",
+        "userId": 891
+      },
+      {
+        "goodsId": 16155,
+        "id": 91609,
+        "pic": "https://cdn.it120.cc/apifactory/2018/01/01/4ecaff42f6f2a54a1784edb76d237ecd.jpg",
+        "userId": 891
+      }
+    ],
+    "content": "<p><br/></p><p><img src=\"https://cdn.it120.cc/apifactory/2018/01/01/a580ef3978f2f623346e97d6752f2f18.jpg\" title=\"apifactory/2018/01/01/a580ef3978f2f623346e97d6752f2f18.jpg\" style=\"white-space: normal;\"/><img src=\"https://cdn.it120.cc/apifactory/2018/01/01/634289daaee3c4ca1b13a284bca0e206.jpg\" title=\"apifactory/2018/01/01/634289daaee3c4ca1b13a284bca0e206.jpg\" style=\"white-space: normal;\"/><img src=\"https://cdn.it120.cc/apifactory/2018/01/01/1cf394e616bc4e6bec29ec93171478ed.jpg\" style=\"\" title=\"apifactory/2018/01/01/1cf394e616bc4e6bec29ec93171478ed.jpg\"/></p><p><br/></p><p><img src=\"https://cdn.it120.cc/apifactory/2018/01/01/9e41c4631bb6acfc0e6c211f177fae98.jpg\" style=\"\" title=\"apifactory/2018/01/01/9e41c4631bb6acfc0e6c211f177fae98.jpg\"/></p><p><br/></p><p><img src=\"https://cdn.it120.cc/apifactory/2018/01/01/943690daae29bbf4bb766bbf7fac88dd.jpg\" title=\"apifactory/2018/01/01/943690daae29bbf4bb766bbf7fac88dd.jpg\" style=\"white-space: normal;\"/></p><p><br/></p><p><br/></p>",
+    "properties": [
+      {
+        "childsCurGoods": [
+          {
+            "dateAdd": "2017-12-31 23:24:31",
+            "id": 4639,
+            "name": "2斤",
+            "paixu": 0,
+            "propertyId": 639,
+            "remark": "",
+            "userId": 891
+          },
+          {
+            "dateAdd": "2017-12-31 23:24:48",
+            "id": 4640,
+            "name": "3斤",
+            "paixu": 0,
+            "propertyId": 639,
+            "remark": "",
+            "userId": 891
+          }
+        ],
+        "dateAdd": "2017-08-23 13:31:11",
+        "dateUpdate": "2017-12-14 22:36:50",
+        "id": 639,
+        "name": "重量",
+        "paixu": 5,
+        "userId": 891
+      }
+    ],
+    "basicInfo": {
+      "barCode": "",
+      "categoryId": 5544,
+      "characteristic": "",
+      "commission": 0.00,
+      "commissionType": 0,
+      "dateAdd": "2018-01-03 15:45:08",
+      "dateStart": "2018-01-03 15:42:51",
+      "dateUpdate": "2018-08-13 11:24:43",
+      "gotScore": 0,
+      "id": 16155,
+      "logisticsId": 311,
+      "minPrice": 2.50,
+      "minScore": 0,
+      "name": "广西甘蔗",
+      "numberFav": 0,
+      "numberGoodReputation": 5,
+      "numberOrders": 7,
+      "originalPrice": 3.00,
+      "paixu": 10,
+      "pic": "https://cdn.it120.cc/apifactory/2018/01/01/c957d6a5729702620e21a864f11d2cfc.png",
+      "pingtuan": false,
+      "pingtuanPrice": 0.00,
+      "propertyIds": ",639,",
+      "recommendStatus": 1,
+      "recommendStatusStr": "推荐",
+      "shopId": 236,
+      "status": 0,
+      "statusStr": "上架",
+      "stores": 10000,
+      "userId": 891,
+      "videoId": "",
+      "views": 345,
+      "weight": 0.00
+    }
+  },
+  "msg": "success"
+}

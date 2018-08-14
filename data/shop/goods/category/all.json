@@ -1,0 +1,110 @@
+{
+  "code": 0,
+  "data": [
+    {
+      "dateAdd": "2018-01-19 15:34:37",
+      "icon": "",
+      "id": 6291,
+      "isUse": true,
+      "key": "101",
+      "level": 1,
+      "name": "热卖",
+      "paixu": 0,
+      "pid": 0,
+      "type": "每份订单限购1种，每种限1份",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:43:47",
+      "icon": "",
+      "id": 5546,
+      "isUse": true,
+      "key": "001",
+      "level": 1,
+      "name": "柑橘",
+      "paixu": 10,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:43:06",
+      "icon": "",
+      "id": 5545,
+      "isUse": true,
+      "key": "002",
+      "level": 1,
+      "name": "核果",
+      "paixu": 11,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:41:57",
+      "icon": "",
+      "id": 5544,
+      "isUse": true,
+      "key": "003",
+      "level": 1,
+      "name": "浆果",
+      "paixu": 12,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:44:20",
+      "icon": "",
+      "id": 5547,
+      "isUse": true,
+      "key": "004",
+      "level": 1,
+      "name": "仁果",
+      "paixu": 13,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:44:36",
+      "icon": "",
+      "id": 5548,
+      "isUse": true,
+      "key": "005",
+      "level": 1,
+      "name": "瓜果",
+      "paixu": 14,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:44:58",
+      "icon": "",
+      "id": 5549,
+      "isUse": true,
+      "key": "006",
+      "level": 1,
+      "name": "干果",
+      "paixu": 15,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    },
+    {
+      "dateAdd": "2018-01-03 13:45:14",
+      "icon": "",
+      "id": 5550,
+      "isUse": true,
+      "key": "007",
+      "level": 1,
+      "name": "其他",
+      "paixu": 16,
+      "pid": 0,
+      "type": "",
+      "userId": 891
+    }
+  ],
+  "msg": "success"
+}

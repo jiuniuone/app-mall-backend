@@ -1,0 +1,14 @@
+{
+  "code": 0,
+  "data": {
+    "creatAt": "2017-08-23 13:24:26",
+    "dateType": 0,
+    "id": 433,
+    "key": "mallName",
+    "remark": "商铺名称",
+    "updateAt": "2017-08-23 13:24:26",
+    "userId": 891,
+    "value": "甜果果小铺+"
+  },
+  "msg": "success"
+}

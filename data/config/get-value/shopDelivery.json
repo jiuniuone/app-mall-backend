@@ -1,0 +1,14 @@
+{
+  "code": 0,
+  "data": {
+    "creatAt": "2018-01-04 20:55:48",
+    "dateType": 0,
+    "id": 1695,
+    "key": "shopDelivery",
+    "remark": "店铺快递提示",
+    "updateAt": "2018-01-04 20:55:48",
+    "userId": 891,
+    "value": "¥28起送 | 同城免费送 | 由于业务有限仅送县城范围"
+  },
+  "msg": "success"
+}
