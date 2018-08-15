@@ -11,3 +11,6 @@ class Notice(Base):
     start_date = models.DateField("有效期开始")
     end_date = models.DateField("有效期结束")
     enabled = models.BooleanField("开通？", default=True)
+
+    def __str__(self):
+        return self.title
