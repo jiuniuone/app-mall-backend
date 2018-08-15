@@ -19,3 +19,14 @@ class Resource(ApiView):
     @api_route('/user/withDraw/apply')
     def apply_withdraw(self):
         return self.json_response({"code": 20001, "msg": "可提现余额不足"})
+
+    # http "http://192.168.31.100/api/mall/user/login?code=033nRnPj2nf00H0EcAPj2l4yPj2nRnPq"
+    @api_route('/user/login')
+    def login(self):
+        code = self.param("code")
+        return self.json_response({"code": 0, "data": {"token": "tokenxxxxxxxxxxxxx", "uid": "uid99999999"}})
+
+    # http "http://192.168.31.100/api/mall/user/check-token?token=tokenxxxxxxxxxxxxx"
+    @api_route('/user/check-token')
+    def check_token(self):
+        return self.json_response({"code": 0})

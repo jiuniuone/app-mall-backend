@@ -34,6 +34,8 @@ class Command(BaseCommand):
         self.import_config()
         self.import_coupon()
 
+
+
     def import_coupon(self):
         if len(Coupon.objects.all()): return
         response = requests.get("https://api.it120.cc/tz/discounts/coupons")
@@ -123,3 +125,7 @@ class Command(BaseCommand):
                     p = Property.objects.create(product=product, name=property["name"])
                     for item in property.pop("childsCurGoods", []):
                         PropertyItem.objects.create(property=p, name=item["name"], price=info["minPrice"])
+
+                url = f"https://api.it120.cc/tz/shop/goods/reputation?goodsId={id}"
+                print(url)
+                json = requests.get(url).json()
