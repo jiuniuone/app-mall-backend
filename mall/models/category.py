@@ -1,9 +1,9 @@
-from acmin.models import AcminModel
-from django.db import models
+from .base import Base, models
 
-class Category(AcminModel):
+class Category(Base):
     class Meta:
         ordering = ['-id']
         verbose_name = verbose_name_plural = "分类"
 
-    name =    models.CharField(max_length=100)
+    name = models.CharField("名称",max_length=100)
+    sequence = models.PositiveSmallIntegerField("顺序")
