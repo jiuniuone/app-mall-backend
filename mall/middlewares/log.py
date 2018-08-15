@@ -41,7 +41,7 @@ class LogMiddleware(MiddlewareMixin):
         message = f'{ip} "{request.method} {path}"{data} {response.status_code} {content} {user_info}'
         #logger.info(message.encode("raw_unicode_escape"))
         #logger.info(bytes(message,"GBK").decode("UTF-8"))
-        logger.info(message)
+        #print(message)
         return response
 
     def process_exception(self, request, exception):

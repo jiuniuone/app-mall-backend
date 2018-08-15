@@ -11,9 +11,9 @@ class Product(Base):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField("名称", max_length=100)
     characteristic = models.CharField("特色", max_length=1000)
-    hot = models.PositiveIntegerField("热度")
+    hot = models.PositiveIntegerField("热度", default=0)
     image_url = models.URLField("主图地址", max_length=500)
-    images = models.TextField('详情图片')
+    images = models.TextField('详情图片', null=True, blank=True)
     banner_url = models.URLField("横幅地址", blank=True, null=True, max_length=500)
     bar_code = models.CharField("条形码地址", null=True, blank=True, max_length=500)
     qr_code = models.CharField("二维码地址", null=True, blank=True, max_length=500)
@@ -25,10 +25,13 @@ class Product(Base):
     max_price = models.FloatField("最高价", default=0)
     order_count = models.PositiveIntegerField("购买次数", default=0)
     good_reputation_count = models.PositiveIntegerField("好评次数", default=0)
-
+    banner_enable = models.BooleanField("横幅显示？", default=False)
     commission = models.PositiveIntegerField("分享奖励", default=0)
     commission_type = models.PositiveSmallIntegerField("分享类型", default=0)  # 1:积分奖励，2：现金奖励
     sequence = models.PositiveSmallIntegerField("顺序", default=0)
+    score = models.PositiveIntegerField("Score", default=200)
+    content = models.TextField("渲染内容", null=True, blank=True)
+    video_id = models.CharField("视频ID", null=True, blank=True,max_length=100)
 
     def __str__(self):
         return self.name
@@ -41,7 +44,7 @@ class Property(Base):
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     name = models.CharField("名称", max_length=20)  # 颜色，尺码等
-    sequence = models.PositiveSmallIntegerField("顺序",default=0)
+    sequence = models.PositiveSmallIntegerField("顺序", default=0)
 
 
 class PropertyItem(Base):

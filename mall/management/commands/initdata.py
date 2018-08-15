@@ -17,7 +17,14 @@ def load_json(file):
         return json.load(load_f)
 
 
-CLEAR = False
+CLEAR = True
+
+url_prefix = 'https://api.it120.cc/tz'
+
+
+def get(url):
+    print(url)
+    return requests.get(url).json()
 
 
 # python manage.py initdata
@@ -26,6 +33,12 @@ class Command(BaseCommand):
         if CLEAR:
             Category.objects.all().delete()
             Product.objects.all().delete()
+            Coupon.objects.all().delete()
+            Config.objects.all().delete()
+            Province.objects.all().delete()
+            City.objects.all().delete()
+            District.objects.all().delete()
+            Notice.objects.all()
 
         self.import_category()
         self.import_product()
@@ -33,13 +46,25 @@ class Command(BaseCommand):
         self.import_address()
         self.import_config()
         self.import_coupon()
+        self.import_banner()
 
-
+    def import_banner(self):
+        # Product.objects.filter(banner_enable=True).all().delete()
+        if len(Product.objects.filter(banner_enable=True).all()): return
+        json = get(f"{url_prefix}/banner/list?key=mallName")
+        for obj in attr(json, "data", []):
+            id = obj["businessId"]
+            if id:
+                product = self.import_product_by_id(obj["businessId"])
+                product.banner_url = obj['picUrl']
+                product.banner_enable = True
+                product.save()
+                print(product)
 
     def import_coupon(self):
         if len(Coupon.objects.all()): return
-        response = requests.get("https://api.it120.cc/tz/discounts/coupons")
-        for obj in attr(response.json(), "data", []):
+        json = get(f"{url_prefix}/discounts/coupons")
+        for obj in attr(json, "data", []):
             Coupon.objects.create(
                 id=obj["id"],
                 name=obj["name"],
@@ -52,15 +77,17 @@ class Command(BaseCommand):
                 expiry_date=12,
                 start_date=datetime.datetime.min,
                 end_date=datetime.datetime.max,
-                enabled=True
+                enabled=True,
+
             )
 
     def import_config(self):
+        # Config.objects.all().delete()
         if len(Config.objects.all()): return
         keys = ["mallName", "recharge_amount_min", "shopPrompt", "shopDelivery", "shopDeliveryPrice", "couponsTitlePicStr", "aboutUsTitle", "servicePhoneNumber", "aboutUsContent", "finderRecommendTtile"]
         for key in keys:
-            json = load_json("config/get-value/couponsTitlePicStr.json")
-            # json = requests.get(f"https://api.it120.cc/tz/config/get-value?key={key}").json()
+            # json = load_json("config/get-value/couponsTitlePicStr.json")
+            json = get(f"{url_prefix}/config/get-value?key={key}")
             print(json)
             data = attr(json, "data")
             if data:
@@ -85,47 +112,51 @@ class Command(BaseCommand):
 
     def import_notice(self):
         if len(Notice.objects.all()) == 0:
-            response = requests.get("https://api.it120.cc/tz/notice/list?pageSize=500")
-            for obj in attr(response.json(), "data.dataList", []):
-                data = requests.get(f"https://api.it120.cc/tz/notice/detail?id={obj['id']}").json()["data"]
+            json = get(f"{url_prefix}/notice/list?pageSize=500")
+            for obj in attr(json, "data.dataList", []):
+                data = get(f"{url_prefix}/notice/detail?id={obj['id']}").json()["data"]
                 Notice.objects.create(title=data["title"], content=data["content"], start_date=datetime.datetime.min, end_date=datetime.datetime.max)
 
     def import_category(self):
         if len(Category.objects.all()) == 0:
-            response = requests.get("https://api.it120.cc/tz/shop/goods/category/all", )
+            json = get(f"{url_prefix}/shop/goods/category/all", )
             models = []
-            for obj in response.json()["data"]:
+            for obj in json["data"]:
                 category = Category(name=obj["name"], sequence=0, id=obj["id"])
                 models.append(category)
             Category.objects.bulk_create(models)
 
+    def import_product_by_id(self, id):
+        json = get(f"{url_prefix}/shop/goods/detail?id={id}")
+        data: dict = json["data"]
+        info = data["basicInfo"]
+
+        product = Product.objects.create(
+            id=info["id"],
+            category_id=info["categoryId"],
+            name=info["name"],
+            characteristic=info["characteristic"],
+            hot=0,
+            image_url=info["pic"],
+            images='\n'.join([p["pic"] for p in data["pics"]]),
+            price=info["minPrice"],
+            content=data['content'],
+            video_id=info.pop('videoId', None),
+        )
+
+        for property in data.pop("properties", []):
+            p = Property.objects.create(product=product, name=property["name"])
+            for item in property.pop("childsCurGoods", []):
+                PropertyItem.objects.create(property=p, name=item["name"], price=info["minPrice"])
+
+        return product
+        # url = f"https://api.it120.cc/tz/shop/goods/reputation?goodsId={id}"
+        # print(url)
+        # json = get(url).json()
+
     def import_product(self):
         if len(Product.objects.all()) == 0:
-            response = requests.get("https://api.it120.cc/tz/shop/goods/list")
-            for obj in response.json()["data"]:
+            json = get(f"{url_prefix}/shop/goods/list")
+            for obj in json["data"]:
                 id = obj["id"]
-                url = f"https://api.it120.cc/tz/shop/goods/detail?id={id}"
-                print(url)
-                response = requests.get(url)
-                data: dict = response.json()["data"]
-                info = data["basicInfo"]
-                pics = data["pics"]
-                product = Product.objects.create(
-                    id=info["id"],
-                    category_id=info["categoryId"],
-                    name=info["name"],
-                    characteristic=info["characteristic"],
-                    hot=0,
-                    image_url=info["pic"],
-                    images='\n'.join([p["pic"] for p in data["pics"]]),
-                    price=info["minPrice"],
-                )
-
-                for property in data.pop("properties", []):
-                    p = Property.objects.create(product=product, name=property["name"])
-                    for item in property.pop("childsCurGoods", []):
-                        PropertyItem.objects.create(property=p, name=item["name"], price=info["minPrice"])
-
-                url = f"https://api.it120.cc/tz/shop/goods/reputation?goodsId={id}"
-                print(url)
-                json = requests.get(url).json()
+                self.import_product_by_id(id)
