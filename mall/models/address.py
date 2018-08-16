@@ -30,7 +30,7 @@ class District(Base):
 class Address(Base):
     class Meta:
         ordering = ['-id']
-        verbose_name = verbose_name_plural = "分类"
+        verbose_name = verbose_name_plural = "地址"
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
     province_id = models.PositiveIntegerField("省份ID")

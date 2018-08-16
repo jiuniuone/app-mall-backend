@@ -39,9 +39,9 @@ class LogMiddleware(MiddlewareMixin):
         name = attr(request, "user.username")
         user_info = f"admin-user-name:{name}" if name else ""
         message = f'{ip} "{request.method} {path}"{data} {response.status_code} {content} {user_info}'
-        #logger.info(message.encode("raw_unicode_escape"))
-        #logger.info(bytes(message,"GBK").decode("UTF-8"))
-        #print(message)
+        # logger.info(message.encode("raw_unicode_escape"))
+        # logger.info(bytes(message,"GBK").decode("UTF-8"))
+        logger.info(message)
         return response
 
     def process_exception(self, request, exception):

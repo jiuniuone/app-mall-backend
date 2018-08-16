@@ -4,7 +4,7 @@ from .base import Base, models
 class Notice(Base):
     class Meta:
         ordering = ['-id']
-        verbose_name = verbose_name_plural = "用户"
+        verbose_name = verbose_name_plural = "通知"
 
     title = models.CharField("标题", max_length=100)
     content = models.TextField("详情")

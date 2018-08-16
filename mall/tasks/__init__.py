@@ -16,13 +16,15 @@ def init_schedule(sender, **kwargs):
     # scheduler.add_job(order.do_charge_cronjob, 'interval', seconds=order.cronjob_interval, max_instances=3)
     # scheduler.add_job(video.do_import_cronjob, 'interval', seconds=video.cronjob_interval, max_instances=3)
     scheduler.start()
-    logger.info("scheduler started")
+    # logger.info("scheduler started")
 
 
 @receiver(app_ready, dispatch_uid="app_ready2")
 def init_schedule2(sender, **kwargs):
     # print("init_schedule")
 
-    logger.info("scheduler2 started")
+    # logger.info("scheduler2 started")
+    pass
+
 
 import_submodules(globals(), __name__, __path__)

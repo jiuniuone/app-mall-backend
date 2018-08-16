@@ -24,3 +24,5 @@ filelock
 wechatpy
 oslo.utils
 cryptography
+Crypto
+pyaes

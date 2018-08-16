@@ -8,6 +8,8 @@ class Product(Base):
         ordering = ['-id']
         verbose_name = verbose_name_plural = "商品"
 
+    list_fields=['name','characteristic','recommendable','stores','price','order_count','good_reputation_count','banner_enable']
+
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField("名称", max_length=100)
     characteristic = models.CharField("特色", max_length=1000)

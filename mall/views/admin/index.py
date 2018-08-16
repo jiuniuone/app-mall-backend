@@ -15,8 +15,9 @@ app_name = __name__.split(".")[0]
 
 full_nodes = [
 
-    ("首页", ["User", ]),
-
+    ("首页", ["User", "Address", "Category", "Config", "Coupon", "MemberCoupon", "Notice", 'Member']),
+    ("商品", ["Category", "Product", "Property", "PropertyItem"]),
+    ("订单", ["Order", "OrderItem"]),
 ]
 
 
@@ -32,6 +33,7 @@ def get_nodes():
         nodes = [to_tuple(node) for node in nodes]
         nodes = [node[0:2] for node in nodes]
         if nodes: result.append((name, nodes))
+    print(result)
     return result
 
 
