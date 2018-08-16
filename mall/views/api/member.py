@@ -1,32 +1,10 @@
-import base64
 import json
 
 import requests
-from Crypto.Cipher import AES
 
 from acmin.utils import attr
-from mall.models import Member
+from mall.models import Config, Member
 from mall.views.api import ApiView, api_route
-
-
-class WXBizDataCrypt:
-    def __init__(self, appId, sessionKey):
-        self.appId = appId
-        self.sessionKey = sessionKey
-
-    def decrypt(self, encryptedData, iv):
-        # base64 decode
-        sessionKey = base64.b64decode(self.sessionKey)
-        encryptedData = base64.b64decode(encryptedData)
-        iv = base64.b64decode(iv)
-        cipher = AES.new(sessionKey, AES.MODE_CBC, iv)
-        decrypted = json.loads(self._unpad(cipher.decrypt(encryptedData)))
-        if decrypted['watermark']['appid'] != self.appId:
-            raise Exception('Invalid Buffer')
-        return decrypted
-
-    def _unpad(self, s):
-        return s[:-ord(s[len(s) - 1:])]
 
 
 class Resource(ApiView):
@@ -50,17 +28,30 @@ class Resource(ApiView):
 
     @api_route('/member/register')
     def register(self):
-        app_id = 'wx775c8bd3c7c0d5df'
-        code, userInfo, iv = self.param(["code", "userInfo", "iv"])
+        code, rawData = self.param(["code", "rawData"])
         open_id, session_key = self.get_session(code)
-        print(code, userInfo, iv)
-        pc = WXBizDataCrypt(app_id, session_key)
-        print(pc.decrypt(userInfo, iv))
-        return self.json_response({"code": 1, })
+        if rawData and open_id:
+            obj = json.loads(rawData)
+            print(obj)
+            mmeber: Member = Member.objects.filter(open_id=open_id).first()
+            if not mmeber:
+                Member.objects.create(
+                    open_id=open_id,
+                    nickname=obj["nickName"],
+                    gender=obj["gender"],
+                    language=obj["language"],
+                    city=obj["city"],
+                    province=obj["province"],
+                    country=obj["country"],
+                    avatar_url=obj["avatarUrl"],
+                    token=""
+                )
+            return self.json_response({"code": 0})
+        return self.json_response({"code": 1})
 
     def get_session(self, code):
-        app_id = 'wx775c8bd3c7c0d5df'
-        app_secret = '7922df1b3a46fb0e189460740d8c281f'
+        app_id = Config.objects.filter(name="appId").first().content
+        app_secret = Config.objects.filter(name="appSecret").first().content
         url = f"https://api.weixin.qq.com/sns/jscode2session?appid={app_id}&secret={app_secret}&js_code={code}&grant_type=authorization_code"
         json = requests.get(url).json()
         open_id = attr(json, "openid")
