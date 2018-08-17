@@ -30,16 +30,16 @@ class Resource(ApiView):
     @api_route('/product/detail')
     def detail(self):
         product: Product = Product.objects.filter(pk=self.int_param("id")).first()
-        product_obj = to_json(product, ["video_id","id", "score","content", "stores", "name", "characteristic", "image_url", "video_url", "price", "order_count", "good_reputation_count"])
+        product_obj = to_json(product, ["video_id", "id", "score", "content", "stores", "name", "characteristic", "image_url", "video_url", "price", "order_count", "good_reputation_count"])
         if product:
             if product.images:
                 product_obj["images"] = product.images.split("\n")
             properties = []
             for property in product.property_set.all():
-                property_obj = to_json(property, ["name","id"])
+                property_obj = to_json(property, ["name", "id"])
                 items = []
                 for item in property.propertyitem_set.all():
-                    items.append(to_json(item, ["name", "price","id"]))
+                    items.append(to_json(item, ["name", "price", "id"]))
                 property_obj["items"] = items
                 properties.append(property_obj)
             product_obj["properties"] = properties
@@ -54,12 +54,6 @@ class Resource(ApiView):
     def reputation(self):
         id = self.int_param("id", 0)
         return self.file_json_response("/product/reputation.json")
-
-    # http "http://localhost/api/mall/product/price?goodsId=15771&propertyChildIds=1795%3A4839%2C"
-    # 加入到购物车页面，当选择规格时调用，多少斤，重量
-    @api_route('/product/price')
-    def price(self):
-        return self.file_json_response("/product/price.json")
 
     # http "https://api.it120.cc/tianguoguoxiaopu/banner/list?key=mallName"
     @api_route('/banner/list')
