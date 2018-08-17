@@ -1,3 +1,4 @@
+import datetime
 import json
 
 import requests
@@ -10,15 +11,18 @@ from mall.views.api import ApiView, api_route
 class Resource(ApiView):
     # https://api.it120.cc/tz/config/get-value?key=mallName
     # http "http://localhost/api/mall/config/get-value?key=mallName"
-
-    # http "https://api.it120.cc/tianguoguoxiaopu/user/amount?token=c6d64df6-50b6-4012-a7e5-868749fe383a"
-    @api_route('/user/amount')
-    def amount(self):
-        return self.json_response({"code": 0, "data": {"balance": 0.00, "freeze": 0.00, "score": 50, "totleConsumed": 0.00}, "msg": "success"})
+    fields = "avatar_url,nickname,mobile,id,balance,freeze,score,sign_continuous_days".split(",")
 
     # http "https://api.it120.cc/tianguoguoxiaopu/user/detail?token=c6d64df6-50b6-4012-a7e5-868749fe383a"
-    @api_route("/user/detail")
+    @api_route("/member/detail")
     def detail(self):
+        member: Member = Member.objects.filter(token=self.param("token")).first()
+        if member:
+            if (not member.last_sign_date or (datetime.date.today() - member.last_sign_date).days > 1) and member.sign_continuous_days > 0:
+                member.sign_continuous_days = 0
+                member.save()
+            return self.obj_response(member, self.fields)
+
         return self.file_json_response("/user/detail.json")
 
     # http "https://api.it120.cc/tianguoguoxiaopu/user/withDraw/apply?token=c6d64df6-50b6-4012-a7e5-868749fe383a&money=100"
@@ -79,3 +83,18 @@ class Resource(ApiView):
         if Member.objects.filter(token=self.param("token")).first():
             return self.json_response({"code": 0})
         return self.json_response({"code": 404})
+
+    # http "https://api.it120.cc/tianguoguoxiaopu/score/sign?token=c6d64df6-50b6-4012-a7e5-868749fe383a"
+    @api_route('/member/sign')
+    def sign(self):
+        member = Member.objects.filter(token=self.param("token")).first()
+        if member:
+            today = datetime.date.today()
+            yesterday = today - datetime.timedelta(days=1)
+            if not member.last_sign_date or (datetime.date.today() - member.last_sign_date).days > 1:
+                member.sign_continuous_days = 1
+            else:
+                member.sign_continuous_days += 1
+            member.save()
+            return self.ok()
+        return self.error(1, "没有找到对应用户")

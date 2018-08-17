@@ -16,6 +16,7 @@ def api_route(path, prefix=""):
 
 
 class ApiView(api.ApiView):
+
     def load_json(self, file):
         path = f"{base}/data/{file}"
         with open(path, 'r', encoding="UTF-8") as load_f:
@@ -24,8 +25,20 @@ class ApiView(api.ApiView):
     def file_json_response(self, file):
         return self.json_response(self.load_json(file))
 
-    def list_response(self, models, include_fields):
-        return self.json_response({"code": 0, "data": [{key: attr(c, key) for key in include_fields} for c in models]})
+    def list_response(self, objs, include_fields):
+        return self.json_response({"code": 0, "data": [{key: attr(c, key) for key in include_fields} for c in objs]})
+
+    def to_json(self, obj, include_fields):
+        return {"code": 0, "data": {key: attr(obj, key) for key in include_fields}}
+
+    def obj_response(self, obj, include_fields):
+        return self.json_response(self.to_json(obj, include_fields))
+
+    def error(self, code: int, message: str = None):
+        return self.json_response({"code": code, "message": message})
+
+    def ok(self):
+        return self.json_response({"code": 0})
 
 
 import_sub_classes(globals(), __name__, __path__)
