@@ -17,13 +17,17 @@ def load_json(file):
         return json.load(load_f)
 
 
-CLEAR = True
+CLEAR = False
 
-url_prefix = 'https://api.it120.cc/tz'
+# app_name='tz'
+app_name = 'tianguoguoxiaopu'
+# app_name = 'gqxywsh'
+url_prefix = f'https://api.it120.cc/{app_name}'
 
 
+# https://api.it120.cc/tianguoguoxiaopu/notice/list?pageSize=7
+# https://api.it120.cc/gqxywsh/shop/subshop/list
 def get(url):
-    print(url)
     return requests.get(url).json()
 
 
@@ -34,7 +38,7 @@ class Command(BaseCommand):
             Category.objects.all().delete()
             Product.objects.all().delete()
             Coupon.objects.all().delete()
-            Config.objects.all().delete()
+            # Config.objects.all().delete()
             Province.objects.all().delete()
             City.objects.all().delete()
             District.objects.all().delete()
@@ -43,7 +47,7 @@ class Command(BaseCommand):
         self.import_category()
         self.import_product()
         self.import_notice()
-        self.import_address()
+        # self.import_address()
         self.import_config()
         self.import_coupon()
         self.import_banner()
@@ -62,11 +66,10 @@ class Command(BaseCommand):
                 print(product)
 
     def import_coupon(self):
-        if len(Coupon.objects.all()): return
+        # if len(Coupon.objects.all()): return
         json = get(f"{url_prefix}/discounts/coupons")
         for obj in attr(json, "data", []):
             Coupon.objects.create(
-                id=obj["id"],
                 name=obj["name"],
                 threshold=obj["moneyHreshold"],
                 reduce=obj['moneyMin'],
@@ -83,7 +86,7 @@ class Command(BaseCommand):
 
     def import_config(self):
         # Config.objects.all().delete()
-        if len(Config.objects.all()): return
+        # if len(Config.objects.all()): return
         keys = ["mallName", "recharge_amount_min", "shopPrompt", "shopDelivery", "shopDeliveryPrice", "couponsTitlePicStr", "aboutUsTitle", "servicePhoneNumber", "aboutUsContent", "finderRecommendTtile"]
         for key in keys:
             # json = load_json("config/get-value/couponsTitlePicStr.json")
@@ -91,11 +94,12 @@ class Command(BaseCommand):
             print(json)
             data = attr(json, "data")
             if data:
-                config = Config.objects.create(name=key, title=data['remark'], content=data["value"])
-                print(config)
+                if not Config.objects.filter(name=key).first():
+                    config = Config.objects.create(name=key, title=data['remark'], content=data["value"])
+                    print(config)
 
     def import_address(self):
-        if Province.objects.all(): return
+        # if Province.objects.all(): return
         array = load_json("city.json")
         provinces = []
         cities = []
@@ -111,26 +115,26 @@ class Command(BaseCommand):
         District.objects.bulk_create(disctricts)
 
     def import_notice(self):
-        if len(Notice.objects.all()) == 0:
-            json = get(f"{url_prefix}/notice/list?pageSize=500")
-            for obj in attr(json, "data.dataList", []):
-                data = get(f"{url_prefix}/notice/detail?id={obj['id']}").json()["data"]
-                Notice.objects.create(title=data["title"], content=data["content"], start_date=datetime.datetime.min, end_date=datetime.datetime.max)
+        # if Notice.objects.all(): return
+        # json = get(f"{url_prefix}/notice/list?pageSize=500")
+        for obj in attr(json, "data.dataList", []):
+            data = get(f"{url_prefix}/notice/detail?id={obj['id']}").json()["data"]
+            Notice.objects.create(title=data["title"], content=data["content"], start_date=datetime.datetime.min, end_date=datetime.datetime.max)
 
     def import_category(self):
-        if len(Category.objects.all()) == 0:
-            json = get(f"{url_prefix}/shop/goods/category/all", )
-            models = []
-            for obj in json["data"]:
+        # if Category.objects.all(): return
+        json = get(f"{url_prefix}/shop/goods/category/all", )
+        models = []
+        for obj in json["data"]:
+            if not Category.objects.filter(pk=obj["id"]).first():
                 category = Category(name=obj["name"], sequence=0, id=obj["id"])
                 models.append(category)
-            Category.objects.bulk_create(models)
+        Category.objects.bulk_create(models)
 
     def import_product_by_id(self, id):
         json = get(f"{url_prefix}/shop/goods/detail?id={id}")
         data: dict = json["data"]
         info = data["basicInfo"]
-
         product = Product.objects.create(
             id=info["id"],
             category_id=info["categoryId"],
@@ -143,8 +147,8 @@ class Command(BaseCommand):
             content=data['content'],
             video_id=info.pop('videoId', None),
         )
-
-        for property in data.pop("properties", []):
+        properties = data.pop("properties", [{"name": "规格", "childsCurGoods": [{"name": "默认", "price": product.price}]}])
+        for property in properties:
             p = Property.objects.create(product=product, name=property["name"])
             for item in property.pop("childsCurGoods", []):
                 PropertyItem.objects.create(property=p, name=item["name"], price=info["minPrice"])
@@ -155,8 +159,9 @@ class Command(BaseCommand):
         # json = get(url).json()
 
     def import_product(self):
-        if len(Product.objects.all()) == 0:
-            json = get(f"{url_prefix}/shop/goods/list")
-            for obj in json["data"]:
-                id = obj["id"]
+        # if Product.objects.all(): return
+        json = get(f"{url_prefix}/shop/goods/list")
+        for obj in json["data"]:
+            id = obj["id"]
+            if not Product.objects.filter(pk=id).first():
                 self.import_product_by_id(id)

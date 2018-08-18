@@ -23,7 +23,7 @@ class Resource(ApiView):
                 member.save()
             return self.obj_response(member, self.fields)
 
-        return self.file_json_response("/user/detail.json")
+        return self.error(1, "no member found")
 
     # http "https://api.it120.cc/tianguoguoxiaopu/user/withDraw/apply?token=c6d64df6-50b6-4012-a7e5-868749fe383a&money=100"
     @api_route('/user/withDraw/apply')

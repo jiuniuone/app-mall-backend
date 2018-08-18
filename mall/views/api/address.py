@@ -18,14 +18,20 @@ class Resource(ApiView):
     def update(self):
         address = self.compose_address()
         if address:
-            address.save()
-            return self.json_response({"code": 0, "msg": "success"})
+            address = Address.objects.filter(mem).first()
+            if address:
+                return self.json_response({"code": 0, "data": address.to_json()})
 
-        return self.json_response({"code": 700, "msg": "更新失败"})
+        return self.json_response({"code": 700, "msg": "暂无数据"})
 
     # http "http://localhost/api/mall/address/default?token=c6d64df6-50b6-4012-a7e5-868749fe383a"
     @api_route('/address/default')
     def default(self):
+        member: Member = Member.objects.filter(token=self.param("token")).first()
+        if member:
+            address = Address.objects.filter(member=member).order_by("is_default").first()
+            if address:
+                return self.json_response({"code": 0, "data": address.to_json()})
         return self.file_json_response("/address/default.json")
 
     def compose_address(self):
@@ -65,7 +71,7 @@ class Resource(ApiView):
 
     # http "https://api.it120.cc/tianguoguoxiaopu/address/detail?token=c6d64df6-50b6-4012-a7e5-868749fe383a&id=31730"
     @api_route('/address/detail')
-    def default(self):
+    def detail(self):
         id = self.int_param("id")
         address = Address.objects.filter(id=id).first()
         if address:
