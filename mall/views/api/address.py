@@ -29,7 +29,8 @@ class Resource(ApiView):
     def default(self):
         member: Member = Member.objects.filter(token=self.param("token")).first()
         if member:
-            address = Address.objects.filter(member=member).order_by("is_default").first()
+            address = Address.objects.filter(member=member).order_by("-is_default").first()
+            print(address.id)
             if address:
                 return self.json_response({"code": 0, "data": address.to_json()})
         return self.file_json_response("/address/default.json")
@@ -45,9 +46,11 @@ class Resource(ApiView):
         city = City.objects.filter(id=city_id).first()
         district = District.objects.filter(id=district_id).first()
         member: Member = Member.objects.filter(token=token).first()
+        id = self.int_param("id", 0)
+        if id == 0: id = None
         if member and provice and city:
             return Address(
-                id=self.int_param("id"),
+                id=id,
                 member=member,
                 provice=provice,
                 city=city,

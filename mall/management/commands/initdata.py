@@ -20,8 +20,8 @@ def load_json(file):
 CLEAR = False
 
 # app_name='tz'
-app_name = 'tianguoguoxiaopu'
-# app_name = 'gqxywsh'
+#app_name = 'tianguoguoxiaopu'
+app_name = 'gqxywsh'
 url_prefix = f'https://api.it120.cc/{app_name}'
 
 
