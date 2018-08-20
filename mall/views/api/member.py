@@ -36,7 +36,6 @@ class Resource(ApiView):
         open_id, session_key = self.get_session(code)
         if rawData and open_id:
             obj = json.loads(rawData)
-            print(obj)
             mmeber: Member = Member.objects.filter(open_id=open_id).first()
             if not mmeber:
                 Member.objects.create(

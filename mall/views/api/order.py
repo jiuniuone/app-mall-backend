@@ -6,21 +6,36 @@ from mall.views.api import ApiView, api_route
 
 def create_order_number():
     while True:
-        result = (random.randint(1234567890, 9999999999))
+        result = (random.randint(12345678901234567890, 99999999999999999999))
         if not Order.objects.filter(order_number=result).first():
             return result
 
 
 class Resource(ApiView):
 
+    # 余额付款
+    @api_route('/order/pay/balance')
+    def pay_with_balance(self):
+        member: Member = Member.objects.filter(token=self.param("token")).first()
+        order: Order = Order.objects.filter(id=self.int_param("orderId")).first()
+        if member and order:
+            money = member.balance - order.fee
+            if money > 0:
+                member.balance -= money
+                order.status = OrderStatus.to_deliver
+                member.save()
+                order.save()
+                OrderLog.objects.create(order=order, status=OrderStatus.to_deliver)
+                return self.ok()
+
+        return self.error(code=1, message="error to pay")
+
     # http "localhost/api/mall/order/create?token=kQkJvnrXmCOlR%2B482qnLOw%3D%3D&productJsonStr=%5B%7B%22product_id%22%3A17233%2C%22count%22%3A1%2C%22items%22%3A%22299%3A1226%2C%22%2C%22logisticsType%22%3A0%2C%20%22inviter_id%22%3A0%7D%2C%7B%22product_id%22%3A17233%2C%22count%22%3A5%2C%22items%22%3A%22299%3A1225%2C%22%2C%22logisticsType%22%3A0%2C%20%22inviter_id%22%3A0%7D%5D&remark=&addressId=4"
     @api_route('/order/create')
     def create(self):
         token, productJsonStr, remark = self.param(["token", "productJsonStr", "remark"])
         address_id = self.int_param("addressId")
-        print(token, productJsonStr, remark, address_id)
         if token and productJsonStr and address_id:
-            print(token)
             member = Member.objects.filter(token=token).first()
             address = Address.objects.filter(id=address_id).first()
             if member and address:

@@ -26,12 +26,19 @@ class Order(Base):
         ordering = ['-id']
         verbose_name = verbose_name_plural = "订单"
 
-    order_number = models.CharField("订单号", unique=True, max_length=10)
+    order_number = models.CharField("订单号", unique=True, max_length=20)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     fee = models.FloatField(default=0.0)
     status = models.PositiveSmallIntegerField("状态", choices=OrderStatus.choices, default=OrderStatus.to_pay)
     remark = models.TextField("备注")
     logistics_fee = models.PositiveIntegerField("运费", default=10)
+
+    @property
+    def total_fee(self):
+        return self.fee + self.logistics_fee
+
+    def __str__(self):
+        return self.order_number
 
     @property
     def status_name(self):
@@ -48,7 +55,8 @@ class Order(Base):
             "order_number": self.order_number,
             "remark": self.remark,
             "fee": self.fee,
-            "logistics_fee":self.logistics_fee
+            "logistics_fee": self.logistics_fee,
+            "total_fee": self.total_fee
         }
 
 
