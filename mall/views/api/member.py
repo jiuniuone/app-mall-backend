@@ -89,8 +89,6 @@ class Resource(ApiView):
     def sign(self):
         member = Member.objects.filter(token=self.param("token")).first()
         if member:
-            today = datetime.date.today()
-            yesterday = today - datetime.timedelta(days=1)
             if not member.last_sign_date or (datetime.date.today() - member.last_sign_date).days > 1:
                 member.sign_continuous_days = 1
             else:

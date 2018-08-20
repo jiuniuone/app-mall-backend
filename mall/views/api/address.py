@@ -18,9 +18,8 @@ class Resource(ApiView):
     def update(self):
         address = self.compose_address()
         if address:
-            address = Address.objects.filter(mem).first()
-            if address:
-                return self.json_response({"code": 0, "data": address.to_json()})
+            address.save()
+            return self.json_response({"code": 0, "data": address.to_json()})
 
         return self.json_response({"code": 700, "msg": "暂无数据"})
 
@@ -30,10 +29,9 @@ class Resource(ApiView):
         member: Member = Member.objects.filter(token=self.param("token")).first()
         if member:
             address = Address.objects.filter(member=member).order_by("-is_default").first()
-            print(address.id)
             if address:
                 return self.json_response({"code": 0, "data": address.to_json()})
-        return self.file_json_response("/address/default.json")
+        return self.json_response({"code": 700, "msg": "暂无数据"})
 
     def compose_address(self):
         token, address, mobile, addressee = self.param(["token", "address", "mobile", "addressee"])
@@ -42,17 +40,18 @@ class Resource(ApiView):
         district_id = self.int_param('districtId')
         code = self.int_param('code')
         is_default = self.param("isDefault") == 'true'
-        provice = Province.objects.filter(id=province_id).first()
+        province = Province.objects.filter(id=province_id).first()
         city = City.objects.filter(id=city_id).first()
         district = District.objects.filter(id=district_id).first()
         member: Member = Member.objects.filter(token=token).first()
+        print(member,province,city)
         id = self.int_param("id", 0)
         if id == 0: id = None
-        if member and provice and city:
+        if member and province and city:
             return Address(
                 id=id,
                 member=member,
-                provice=provice,
+                provice=province,
                 city=city,
                 district=district,
                 address=address,
@@ -66,6 +65,7 @@ class Resource(ApiView):
     @api_route('/address/add')
     def add(self):
         address = self.compose_address()
+        print(address)
         if address:
             address.save()
             return self.json_response({"code": 0, "data": address.to_json()})

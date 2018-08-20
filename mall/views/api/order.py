@@ -1,7 +1,14 @@
 import json
-
-from mall.models import Address, Member, Order, OrderItem, PropertyItem
+import random
+from mall.models import Address, Member, Order, OrderItem, OrderLog, PropertyItem, Property, Product, OrderStatus
 from mall.views.api import ApiView, api_route
+
+
+def create_order_number():
+    while True:
+        result = (random.randint(1234567890, 9999999999))
+        if not Order.objects.filter(order_number=result).first():
+            return result
 
 
 class Resource(ApiView):
@@ -30,12 +37,19 @@ class Resource(ApiView):
                 count = 0
                 fee = 0
                 if item_array:
-                    order: Order = Order.objects.create(address=address)
+                    order: Order = Order.objects.create(
+                        address=address,
+                        status=OrderStatus.to_pay,
+                        order_number=create_order_number(),
+                        remark=remark
+                    )
                     for (item, amount) in item_array:
                         OrderItem.objects.create(order=order, item=item, amount=amount)
                         count += amount
                         fee += amount * item.price
-
+                    order.fee = fee
+                    order.save()
+                    OrderLog.objects.create(order=order, status=OrderStatus.to_pay)
                     return self.json_response({
                         "code": 0,
                         "data": {
@@ -69,14 +83,31 @@ class Resource(ApiView):
     # http "https://api.it120.cc/tianguoguoxiaopu/order/list?token=c6d64df6-50b6-4012-a7e5-868749fe383a&pageSize=10000&page=1"
     @api_route('/order/list')
     def list(self):
-        return self.file_json_response("/order/list.json")
+        orders = [order.to_json() for order in Order.objects.filter(
+            address__member__token=self.param("token"),
+            status=self.int_param("status", 0)
+        ).all()]
+        if orders:
+            return self.json_response({"code": 0, "data": orders})
+        else:
+            return self.json_response({"code": 1, "message": "no order found"})
 
     # http "https://api.it120.cc/tianguoguoxiaopu/order/close?token=c6d64df6-50b6-4012-a7e5-868749fe383a&orderId=133059"
     @api_route('/order/close')
     def close(self):
-        return self.json_response({"code": 0, "msg": "success"})
+        order = Order.objects.filter(pk=self.int_param("id"), address__member__token=self.param("token")).first()
+        if order:
+            order.status = OrderStatus.closed
+            order.save()
+            return self.json_response({"code": 0, "msg": "success"})
+
+        return self.error(code=1, message="没有此订单")
 
     # http "https://api.it120.cc/tianguoguoxiaopu/order/detail?token=c6d64df6-50b6-4012-a7e5-868749fe383a&id=133068"
     @api_route('/order/detail')
     def detail(self):
-        return self.file_json_response("/order/detail.json")
+        order = Order.objects.filter(pk=self.int_param("id"), address__member__token=self.param("token")).first()
+        if order:
+            return self.json_response({"code": 0, "data": order.to_json()})
+
+        return self.error(code=1, message="没有此订单")

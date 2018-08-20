@@ -43,8 +43,7 @@ class Address(Base):
     is_default = models.BooleanField("默认收货地址？", default=False)
 
     def to_json(self):
-        print(self.id)
-        json = {
+        return {
             "provinceId": self.provice.id,
             "provinceStr": self.provice.name,
             "address": self.addressee,
@@ -58,5 +57,3 @@ class Address(Base):
             "linkMan": self.addressee,
             "mobile": self.phone_number,
         }
-        print(json)
-        return json
