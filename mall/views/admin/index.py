@@ -17,8 +17,8 @@ full_nodes = [
 
     ("首页", ["User", "Address", "Category", "Config", "Coupon", "MemberCoupon", "Notice", 'Member']),
     ("商品", ["Category", "Product", "Property", "PropertyItem"]),
-    ("订单", ["Order", "OrderItem"]),
-    ("物流", ["Province", "City","District","Address", "Shipper", "Logistics", "LogisticsTrace"]),
+    ("订单", ["Order", "OrderItem", "LogisticsTrace"]),
+    ("物流", ["Province", "City", "District", "Address", "Shipper"]),
 ]
 
 
@@ -34,7 +34,6 @@ def get_nodes():
         nodes = [to_tuple(node) for node in nodes]
         nodes = [node[0:2] for node in nodes]
         if nodes: result.append((name, nodes))
-    print(result)
     return result
 
 
@@ -47,8 +46,8 @@ def index(request):
     context = {
         "random": ''.join(random.sample(string.ascii_letters + string.digits, 8)),
         "nodes": get_nodes(),
-        "site_name": "光趣",
-        "copyright": "光趣 © 2016-2018",
+        "site_name": "玩具商城",
+        "copyright": "玩具商城 © 2016-2018",
         "role_name": "管理员",
 
     }

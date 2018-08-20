@@ -69,35 +69,3 @@ class Address(Base):
 
     def __str__(self):
         return f"{self.province} {self.city} {self.district if self.district else ''} {self.address}"
-
-
-class Shipper(Base):
-    class Meta:
-        ordering = ['-id']
-        verbose_name = verbose_name_plural = "物流公司"
-
-    name = models.CharField("名称", max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-class Logistics(Base):
-    class Meta:
-        ordering = ['-id']
-        verbose_name = verbose_name_plural = "物流"
-
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE)
-    tracking_number = models.CharField("物流单号", max_length=30)
-    fee = models.PositiveIntegerField("费用")
-
-
-class LogisticsTrace(Base):
-    class Meta:
-        ordering = ['-id']
-        verbose_name = verbose_name_plural = "物流跟踪"
-
-    logistics = models.ForeignKey(Logistics, on_delete=models.CASCADE)
-    event = models.CharField("事件", max_length=500)
-    event_time = models.DateTimeField("时间")

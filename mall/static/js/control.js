@@ -42,7 +42,7 @@ function doPrint(obj) {
     var height = 15;
     LODOP.SET_PRINT_STYLE("FontColor", 16711680);
     //LODOP.ADD_PRINT_RECT(62,16,459,217,0,1);
-    LODOP.ADD_PRINT_TEXT(height, 30, 157, 25, "光趣私影消费明细");
+    LODOP.ADD_PRINT_TEXT(height, 30, 157, 25, "光趣商城消费明细");
     LODOP.SET_PRINT_STYLEA(2, "FontName", "隶书");
     LODOP.SET_PRINT_STYLEA(2, "FontSize", 13);
     //LODOP.SET_PRINT_STYLEA(2,"FontColor",0);

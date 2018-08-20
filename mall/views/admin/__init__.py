@@ -112,7 +112,7 @@ class BaseListView(StaticMixin, UserCheckMixin, ContextMixin, AdminListView):
             names = [f.name for f in model_fields]
         excludes = self.get_model_exclude_names()
         excludes = excludes + ['id', 'created', 'modified'] + [
-            f.name for f in model_fields if f.related_model
+            f.name for f in model_fields if f.related_model and f.name not in self.get_model_include_names()
         ]
         result = []
         for name in names:
@@ -123,10 +123,16 @@ class BaseListView(StaticMixin, UserCheckMixin, ContextMixin, AdminListView):
                 orderable = False
             if name not in excludes:
                 if not verbose_name:
-                    verbose_name = field_dict[name].verbose_name if name in field_dict else name
+                    field = field_dict[name]
+                    from django.db.models.fields.related import ForeignKey
+                    if type(field) == ForeignKey:
+                        verbose_name = field.related_model._meta.verbose_name
+                    else:
+                        verbose_name = field.verbose_name if name in field_dict else name
                 field = Field(name, verbose_name, name, None, orderable)
                 result.append(field)
 
+        print(result)
         return result
 
     def get_parent_list_fields(self):
@@ -135,7 +141,6 @@ class BaseListView(StaticMixin, UserCheckMixin, ContextMixin, AdminListView):
         chains = get_ancestors(model, self.get_max_cls())
         chain_names = [name for name, _ in chains]
         count = len(chains)
-
 
         for index in range(0, count):
             name, model = chains[index]

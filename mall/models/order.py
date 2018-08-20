@@ -1,6 +1,7 @@
 from acmin.utils import first
 from .base import Base, models
 from .product import PropertyItem
+from .shipper import Shipper
 from .address import Address
 
 
@@ -26,12 +27,16 @@ class Order(Base):
         ordering = ['-id']
         verbose_name = verbose_name_plural = "订单"
 
+    list_fields = ["order_number", "fee", "logistics_fee", "status", "shipper", "tracking_number"]
+
     order_number = models.CharField("订单号", unique=True, max_length=20)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    fee = models.FloatField(default=0.0)
+    shipper = models.ForeignKey(Shipper, on_delete=models.CASCADE, null=True, blank=True, verbose_name="物流公司")
+    fee = models.FloatField("费用", default=0.0)
     status = models.PositiveSmallIntegerField("状态", choices=OrderStatus.choices, default=OrderStatus.to_pay)
     remark = models.TextField("备注")
     logistics_fee = models.PositiveIntegerField("运费", default=10)
+    tracking_number = models.CharField("物流单号", max_length=30, null=True, blank=True)
 
     @property
     def total_fee(self):
@@ -67,6 +72,16 @@ class OrderLog(Base):
 
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField("状态", choices=OrderStatus.choices, default=OrderStatus.to_pay)
+
+
+class LogisticsTrace(Base):
+    class Meta:
+        ordering = ['-id']
+        verbose_name = verbose_name_plural = "物流跟踪"
+
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    event = models.CharField("事件", max_length=500)
+    event_time = models.DateTimeField("时间")
 
 
 class OrderItem(Base):
