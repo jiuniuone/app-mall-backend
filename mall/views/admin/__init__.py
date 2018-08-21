@@ -101,7 +101,7 @@ class BaseListView(StaticMixin, UserCheckMixin, ContextMixin, AdminListView):
         return attr(self.model, "list_exclude", [])
 
     def get_model_include_names(self):
-        return attr(self.model, "list_fields")
+        return attr(self.model, "list_fields", [])
 
     def get_model_list_fields(self):
         cls = self.model
@@ -110,7 +110,8 @@ class BaseListView(StaticMixin, UserCheckMixin, ContextMixin, AdminListView):
         field_dict = OrderedDict([(f.name, f) for f in model_fields])
         if names == '__all__' or not names:
             names = [f.name for f in model_fields]
-        excludes = self.get_model_exclude_names()
+        excludes = self.get_model_exclude_names() or []
+
         excludes = excludes + ['id', 'created', 'modified'] + [
             f.name for f in model_fields if f.related_model and f.name not in self.get_model_include_names()
         ]

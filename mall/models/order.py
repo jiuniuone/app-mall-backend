@@ -1,4 +1,4 @@
-from acmin.utils import first
+from acmin.utils import first, attr
 from .base import Base, models
 from .product import PropertyItem
 from .shipper import Shipper
@@ -61,7 +61,10 @@ class Order(Base):
             "remark": self.remark,
             "fee": self.fee,
             "logistics_fee": self.logistics_fee,
-            "total_fee": self.total_fee
+            "total_fee": self.total_fee,
+            "shipper": attr(self.shipper, "name"),
+            "tracking_number": self.tracking_number,
+            "logistics_traces": [l.to_json() for l in self.logisticstrace_set.order_by("-event_time").all()]
         }
 
 
@@ -82,6 +85,12 @@ class LogisticsTrace(Base):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     event = models.CharField("事件", max_length=500)
     event_time = models.DateTimeField("时间")
+
+    def to_json(self):
+        return {
+            "event": self.event,
+            "event_time": self.event_time.strftime("%Y-%m-%d %H:%M:%S")
+        }
 
 
 class OrderItem(Base):
