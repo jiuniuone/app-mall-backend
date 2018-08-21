@@ -17,7 +17,7 @@ full_nodes = [
 
     ("首页", ["User", "Address", "Category", "Config", "Coupon", "MemberCoupon", "Notice", 'Member']),
     ("商品", ["Category", "Product", "Property", "PropertyItem"]),
-    ("订单", ["Order", "OrderItem", "LogisticsTrace"]),
+    ("订单", ["Order", "OrderItem", "LogisticsTrace", "Reputation"]),
     ("物流", ["Province", "City", "District", "Address", "Shipper"]),
 ]
 

@@ -34,11 +34,11 @@ class ApiView(api.ApiView):
     def obj_response(self, obj, include_fields):
         return self.json_response(self.to_json(obj, include_fields))
 
-    def error(self, code: int, message: str = None):
+    def error(self, code: int = 1, message: str = None):
         return self.json_response({"code": code, "message": message})
 
-    def ok(self):
-        return self.json_response({"code": 0})
+    def ok(self, message=None):
+        return self.json_response({"code": 0, "message": message})
 
 
 import_sub_classes(globals(), __name__, __path__)

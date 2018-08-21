@@ -1,6 +1,6 @@
 import json
 import random
-from mall.models import Address, Member, Order, OrderItem, OrderLog, PropertyItem, Property, Product, OrderStatus
+from mall.models import Address, Member, Order, OrderItem, OrderLog, PropertyItem, Property, Product, OrderStatus, Reputation
 from mall.views.api import ApiView, api_route
 
 
@@ -136,3 +136,31 @@ class Resource(ApiView):
             return self.json_response({"code": 0, "msg": "success"})
 
         return self.error(code=1, message="没有此订单")
+
+    # http://192.168.31.80/api/mall/order/reputation?postJsonString=%7B%22token%22%3A%22Fv0IBv%2B3jhD%2Fjoxrdm8sFA%3D%3D%22%2C%22orderId%22%3A%227%22%2C%22reputations%22%3A%5B%5D%7D
+    @api_route("/order/reputation")
+    def reputation(self):
+        obj = json.loads(self.param("json"))
+        token = obj.pop("token", None)
+        order_id = obj.pop("orderId", None)
+        reputations = obj.pop("reputations", None)
+        success = False
+        if token and reputations and order_id:
+            member: Member = Member.objects.filter(token=token).first()
+            order: Order = Order.objects.filter(pk=int(order_id)).first()
+            item_id_set = set([item.id for item in order.orderitem_set.all()])
+            if member and order:
+                for re in reputations:
+                    item_id = re.pop("id", 0)
+                    comment = re.pop('comment', None)
+                    remark = re.pop("remark", None)
+                    if item_id and comment and remark and item_id in item_id_set:
+                        Reputation.objects.create(item_id=item_id, comment=int(comment), remark=remark)
+                        success = True
+                        item_id_set.remove(item_id)
+
+            if len(item_id_set) == 0:
+                order.status = OrderStatus.completed
+                order.save()
+
+        return self.ok() if success else self.error()

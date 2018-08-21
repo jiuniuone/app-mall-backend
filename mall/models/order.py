@@ -102,11 +102,15 @@ class OrderItem(Base):
     item = models.ForeignKey(PropertyItem, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField("数量")
 
+    def __str__(self):
+        return f"{self.order.order_number}-{self.item.name}"
+
     def to_json(self):
         property_item: PropertyItem = self.item
         property = property_item.property
         product = property.product
         return {
+            "id": self.id,
             "order_id": self.order.id,
             "product_id": product.id,
             "product_name": product.name,
