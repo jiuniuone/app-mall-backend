@@ -1,5 +1,5 @@
 from acmin.views.api import to_json
-from mall.models import Category, Product
+from mall.models import Category, Product, Reputation, Order, OrderItem
 from mall.views.api import ApiView, api_route
 
 
@@ -52,8 +52,22 @@ class Resource(ApiView):
     # 好评列表
     @api_route('/product/reputation')
     def reputation(self):
-        id = self.int_param("id", 0)
-        return self.file_json_response("/product/reputation.json")
+        product: Product = Product.objects.filter(pk=self.int_param("productId")).first()
+        if product:
+            reputations = Reputation.objects.filter(item__item__property__product=product).all()
+            array = []
+            for reputation in reputations:
+                item: OrderItem = reputation.item
+                array.append({
+                    "comment": reputation.comment_name,
+                    "remark": reputation.remark,
+                    "avatar_url": item.order.address.member.avatar_url,
+                    "item": f"{item.item.property.name}:{item.item.name}",
+                    "time": reputation.created.strftime("%Y-%m-%d %H:%M:%S")
+                })
+            return self.json_response({"code": 0, "data": array})
+
+        return self.error()
 
     # http "https://api.it120.cc/tianguoguoxiaopu/banner/list?key=mallName"
     @api_route('/banner/list')

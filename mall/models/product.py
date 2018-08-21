@@ -8,7 +8,7 @@ class Product(Base):
         ordering = ['-id']
         verbose_name = verbose_name_plural = "商品"
 
-    list_fields=['name','characteristic','recommendable','stores','price','order_count','good_reputation_count','banner_enable']
+    list_fields = ['name', 'characteristic', 'recommendable', 'stores', 'price', 'order_count', 'good_reputation_count', 'banner_enable']
 
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField("名称", max_length=100)
@@ -33,7 +33,7 @@ class Product(Base):
     sequence = models.PositiveSmallIntegerField("顺序", default=0)
     score = models.PositiveIntegerField("Score", default=200)
     content = models.TextField("渲染内容", null=True, blank=True)
-    video_id = models.CharField("视频ID", null=True, blank=True,max_length=100)
+    video_id = models.CharField("视频ID", null=True, blank=True, max_length=100)
 
     def __str__(self):
         return self.name
@@ -48,6 +48,9 @@ class Property(Base):
     name = models.CharField("名称", max_length=20)  # 颜色，尺码等
     sequence = models.PositiveSmallIntegerField("顺序", default=0)
 
+    def __str__(self):
+        return f"{self.product} {self.name}"
+
 
 class PropertyItem(Base):
     class Meta:
@@ -58,3 +61,6 @@ class PropertyItem(Base):
     name = models.CharField("名称", max_length=20)  # 颜色，尺码等
     price = models.PositiveIntegerField("价格")
     sequence = models.PositiveSmallIntegerField("顺序", default=0)
+
+    def __str__(self):
+        return f"{self.property} {self.name}"
