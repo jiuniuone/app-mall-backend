@@ -126,3 +126,13 @@ class Resource(ApiView):
             return self.json_response({"code": 0, "data": order.to_json()})
 
         return self.error(code=1, message="没有此订单")
+
+    @api_route("/order/delivery")
+    def delivery(self):
+        order = Order.objects.filter(pk=self.int_param("id"), address__member__token=self.param("token")).first()
+        if order:
+            order.status = OrderStatus.to_evaluate
+            order.save()
+            return self.json_response({"code": 0, "msg": "success"})
+
+        return self.error(code=1, message="没有此订单")
