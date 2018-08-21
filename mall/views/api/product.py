@@ -10,11 +10,6 @@ class Resource(ApiView):
     def category(self):
         return self.list_response(Category.objects.all(), ["id", "name"])
 
-    # http "http://localhost/api/mall/product/kanjia/list"
-    @api_route('/product/kanjia/list')
-    def kanjia_list(self):
-        return self.file_json_response("/product/kanjia/list.json")
-
     # http "http://localhost/api/mall/product/list?page=1&pageSize=10000&categoryId="
     # 商品列表
     @api_route('/product/list')
